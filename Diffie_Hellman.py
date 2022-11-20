@@ -7,21 +7,21 @@ class ProtocolDH:
         self.__private_key = pr_key
         self.__full_key = None
 
-    def get_part_key(self):
+    def get_part_key(self) -> int:
         """Создание частичного ключа для обмена между пользователями"""
         return self.__public_key_1 ** self.__private_key % self.__public_key_2
 
-    def get_ful_key(self, partial_key):
+    def get_ful_key(self, partial_key) -> int:
         """Создания полного ключа на основе двух публичных ключей и собственного"""
         full_key = partial_key ** self.__private_key % self.__public_key_2
         self.__full_key = full_key
         return full_key
 
-    def encrypt(self, message: str):
+    def encrypt(self, message: str) -> str:
         """Зашифровка сообщения через полный ключ"""
-        return ''.join([chr(ord(symbol) + ord(self.__full_key) % 65536) for symbol in message])
+        return ''.join([chr(ord(symbol) + self.__full_key % 65536) for symbol in message])
 
-    def decrypt(self, message: str):
+    def decrypt(self, message: str) -> str:
         """Функция дешифрования сообщения через полный ключ"""
-        return ''.join([chr(ord(symbol) - ord(self.__full_key) % 65536) for symbol in message])
+        return ''.join([chr(ord(symbol) - self.__full_key % 65536) for symbol in message])
 
