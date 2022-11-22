@@ -1,6 +1,5 @@
 import socket
 import re
-from random import randint
 from Diffie_Hellman import ProtocolDH
 
 
@@ -15,7 +14,7 @@ def reciever(sock: socket.socket, printable=False) -> str:
     return message
 
 
-CLIENT_PRIVATE_KEY = randint(1, 1024)  # создание приватного ключа клиента
+CLIENT_PRIVATE_KEY = int(open('private_client_key', 'r').read())  # создание приватного ключа клиента
 
 sock = socket.socket()
 flag = True
@@ -63,3 +62,5 @@ except ConnectionRefusedError:
     print("Подключение не установлено (возможно, введён неверный номер порта).")
 except ValueError:
     print("Подключение не установлено (возможно, публичный ключ клиента не прошёл проверку).")
+except OverflowError:
+    print("Введён порт, невходящий в промежуток 0-65535")
